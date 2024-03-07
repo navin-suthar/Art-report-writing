@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    :root {
+      --dark: #1d1d1d;
+      --green: #28a92b;
+      --purple: #8d3dae;
+      --red: #ff0000;
+      --blue: #0000ff;
+    }
+
+    body {
+      background-color: #111;
+      font-family: "Signika Negative", sans-serif, Arial;
+      overscroll-behavior: none;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    #smooth-content {
+      overflow: visible;
+      width: 100%;
+      height: 300vh;
+      /* Increased height for scrolling */
+    }
+
+    .circle {
+      width: 100px;
+      height: 100px;
+      background-color: var(--green);
+      border-radius: 50%;
+      position: fixed;
+
+      transform: translateX(-50%);
+      z-index: 100;
+      line-height: 100px;
+      font-size: 50px;
+      text-align: center;
+      will-change: transform;
+      top: 0;
+
+    }
+
+    .circle.first {
+      left: 50%;
+    }
+
+    .circle.second {
+      background-color: var(--purple);
+      top: 0;
+      /* left: 50%; */
+
+      /* 70% of viewport height */
+    }
+
+    .circle.third {
+      background-color: var(--red);
+      top: 0;
+      /* left: 50%; */
+      /* 90% of viewport height */
+    }
+
+    .circle.fourth {
+      background-color: var(--blue);
+      top: 100vh;
+      /* 100% of viewport height */
+    }
+
+    #image {
+      position: fixed;
+      max-width: 10%;
+      top: 50vh;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .flipped {
+      transform: translate(-50%, -50%) scaleX(-1) !important;
+    }
+
+    header .name {
+      color: white;
+    }
+
+    .text-orange {
+      color: orange;
+      width: 30vw;
+    }
+
+    .right {
+      top: 10%;
+      right: 10%;
+      position: absolute;
+    }
+
+    .left {
+      top: 20%;
+      left: 10%;
+      position: absolute;
+    }
+
+    .disabled {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+      <!-- <div class="circle first">1</div>
+          <div class="circle second">2</div>
+          <div class="circle third">3</div> -->
+      <img src="./assets/img/blue.png" class="circle third disabled" alt="">
+      <img src="./assets/img/green.png" class="circle second disabled" alt="">
+      <img src="./assets/img/orange.png" class="circle first " alt="">
+      <div class="text-orange right" style="display: none;">Reports often involve investigating and analysing a problem
+        and coming up with a solution. This means that you need to take a position or provide a solution and you need
+        clear reasons for your solution.
+        The Art of Report Writing
+        Report writing is common in a number of disciplines. A report is a specific form of writing, written concisely
+        and clearly and typically organised around identifying
+        and examining issues, events, or findings from a research investigation.</div>
+      <div class="text-orange left" style="display: none;">Reports often involve investigating and analysing a problem and coming up with a solution. This means that you need to take a position or provide a solution and you need clear reasons for your solution.</div>
+
+      <div class="image-container">
+        <img src="./assets/img/tabletreport.png" alt="Image" id="image">
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const circle1 = document.querySelector('.circle.first');
+    const circle2 = document.querySelector('.circle.second');
+    const circle3 = document.querySelector('.circle.third');
+
+    circle2.classList.remove('disabled');
+    circle3.classList.remove('disabled');
+
+    const leftText = document.querySelector('.left');
+    const rightText = document.querySelector('.right');
+
+    if (scrollPosition > 25 && scrollPosition <= 35) {
+
+      rightText.style.display = ``;
+      leftText.style.display = `none`;
+    } else if (scrollPosition > 35) {
+      leftText.style.display = ``;
+      rightText.style.display = `none`;
+    } else {
+      leftText.style.display = `none`;
+      rightText.style.display = `none`;
+    }
+
+
+    if (scrollPosition >= 0 && scrollPosition <= window.innerHeight * 0.2) {
+      circle1.style.top = `${scrollPosition}px`;
+      circle1.style.left = `50%`;
+      circle2.style.left = `50%`;
+      circle3.style.left = `50%`;
+      circle1.style.opacity = 1;
+      circle2.style.opacity = 0;
+      circle3.style.opacity = 0; 
+      circle2.style.top = `${scrollPosition}px`;
+      circle2.style.left = `50%`; 
+      circle3.style.top = `${scrollPosition}px`;
+      circle3.style.left = `50%`; 
+    } else if (scrollPosition > window.innerHeight * 0.2 && scrollPosition <= window.innerHeight * 0.4) {
+      circle1.style.opacity = 0;
+      circle2.style.opacity = 1;
+      circle3.style.opacity = 1; 
+      circle3.style.left = ``;
+    }
+    console.log(scrollPosition >= window.innerHeight * 0.14 && scrollPosition <= window.innerHeight * 0.85);
+    if (scrollPosition >= window.innerHeight * 0.14 && scrollPosition <= window.innerHeight * 0.85) {
+      const verticalOffset = (scrollPosition - window.innerHeight * 0.14) * 0.5; 
+      const topPosition = 118 + verticalOffset; 
+      circle2.style.top = `${topPosition}px`; 
+      circle3.style.top = `${topPosition}px`; 
+      console.log('topPosition', topPosition);
+      if (topPosition <= 165) {
+        const leftOffsetCircle2 = (scrollPosition - window.innerHeight * 0.14) * 0.5;
+        const newLeftPositionCircle2 = Math.max(14, 50 - leftOffsetCircle2);
+        circle2.style.left = `${newLeftPositionCircle2}%`;
+        const rightOffsetCircle3 = (scrollPosition - window.innerHeight * 0.14) * 0.5;
+        const newRightPositionCircle3 = Math.max(14, 50 - rightOffsetCircle3);
+        circle3.style.right = `${newRightPositionCircle3}%`;
+      } else if (topPosition >= 319.39) {
+
+        circle2.style.top = `511.265px`;
+        circle3.style.top = `511.265px`;
+        const leftOffsetCircle2 = (topPosition - 319.39) * 0.5;
+        const newLeftPositionCircle2 = Math.min(45.25, 35 + leftOffsetCircle2);
+        circle2.style.left = `${newLeftPositionCircle2}%`;
+        const rightOffsetCircle3 = (topPosition - 319.39) * 0.5;
+        const newRightPositionCircle3 = Math.min(45.25, 35 + rightOffsetCircle3);
+        circle3.style.right = `${newRightPositionCircle3}%`;
+        console.log(topPosition === 340.015);
+        if (topPosition >= 325.015) {
+          circle1.style.top = `511.265px`;
+          circle1.style.opacity = 1;
+          circle2.style.opacity = 0;
+          circle3.style.opacity = 0;
+        } else {
+          circle1.style.opacity = 0;
+          circle2.style.opacity = 1;
+          circle3.style.opacity = 1;
+        }
+      } else {
+        circle2.style.left = `14%`; 
+        circle3.style.right = `14%`; 
+      }
+
+
+    }
+    const image = document.getElementById('image');
+    if (scrollPosition >= 300) {
+      image.classList.add('flipped');
+    } else {
+      image.classList.remove('flipped');
+    }
+  });
+</script>
+
+</html>
